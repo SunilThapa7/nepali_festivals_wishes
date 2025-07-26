@@ -23,14 +23,14 @@ class AppTheme {
         color: Color(0xFF333333),
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 4,
       shadowColor: Colors.black.withOpacity(0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelColor: const Color(0xFFD32F2F),
       unselectedLabelColor: Colors.grey,
       indicator: BoxDecoration(
@@ -81,7 +81,7 @@ class AppTheme {
         color: Colors.white,
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 8,
       shadowColor: Colors.black.withOpacity(0.3),
       shape: RoundedRectangleBorder(
@@ -89,7 +89,7 @@ class AppTheme {
       ),
       color: const Color(0xFF1E1E1E),
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelColor: const Color(0xFFFF5252),
       unselectedLabelColor: Colors.grey,
       indicator: BoxDecoration(

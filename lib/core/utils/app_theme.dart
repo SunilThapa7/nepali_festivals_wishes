@@ -63,7 +63,7 @@ ThemeData lightTheme() {
         ),
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 2,
       color: Colors.white,
       shape: RoundedRectangleBorder(
@@ -125,7 +125,7 @@ ThemeData darkTheme() {
         ),
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 2,
       color: const Color(0xFF1E1E1E),
       shape: RoundedRectangleBorder(
