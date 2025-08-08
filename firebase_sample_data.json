@@ -1,0 +1,124 @@
+{
+  "festivals": {
+    "dashain": {
+      "name": "Dashain",
+      "description": "Dashain is the biggest and longest Hindu festival in Nepal. It celebrates the victory of good over evil and is characterized by family gatherings, blessings from elders, and traditional festivities. The festival honors the goddess Durga and her victory over the demon Mahishasura.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fdashain.jpg",
+      "category": "Religious",
+      "nepaliWishes": [
+        "शुभ विजया दशमी २०८०",
+        "दसैंको हार्दिक मंगलमय शुभकामना",
+        "यस पावन पर्वले तपाईंको जीवनमा सुख, शान्ति र समृद्धि ल्याओस्",
+        "नवदुर्गा भवानीको आशीर्वादले तपाईंको जीवन सधैं खुशीले भरिएको होस्"
+      ],
+      "englishWishes": [
+        "Happy Vijaya Dashami 2080!",
+        "Best wishes for a joyous Dashain festival",
+        "May this auspicious occasion bring happiness, peace, and prosperity to your life",
+        "May Goddess Durga bless you with success and happiness"
+      ],
+      "cardImageUrls": [
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Fdashain_card1.jpg",
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Fdashain_card2.jpg",
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Fdashain_card3.jpg"
+      ],
+      "date": "2025-10-15"
+    },
+    "tihar": {
+      "name": "Tihar",
+      "description": "Tihar, also known as Deepawali, is a five-day Hindu festival that celebrates the bond between brothers and sisters. It is known as the festival of lights, where homes are decorated with oil lamps, candles, and colorful lights. Each day is dedicated to different deities and animals.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Ftihar.jpg",
+      "category": "Religious",
+      "nepaliWishes": [
+        "शुभ दीपावली २०८०",
+        "तिहारको हार्दिक शुभकामना",
+        "यो तिहारले तपाईंको जीवनमा नयाँ उज्यालो ल्याओस्",
+        "लक्ष्मी मैयाको कृपा सधैं रहोस्"
+      ],
+      "englishWishes": [
+        "Happy Deepawali 2080!",
+        "Wishing you a bright and prosperous Tihar",
+        "May this Tihar bring new light to your life",
+        "May Goddess Laxmi bless you with wealth and prosperity"
+      ],
+      "cardImageUrls": [
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Ftihar_card1.jpg",
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Ftihar_card2.jpg",
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Ftihar_card3.jpg"
+      ],
+      "date": "2025-11-01"
+    },
+    "holi": {
+      "name": "Holi",
+      "description": "Holi is the festival of colors that welcomes spring. It celebrates the eternal love of Radha and Krishna, as well as the triumph of good over evil. People gather to play with colors, share sweets, and spread joy and love.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fholi.jpg",
+      "category": "Cultural",
+      "nepaliWishes": [
+        "होलीको शुभकामना",
+        "रंगीन होलीको हार्दिक मंगलमय शुभकामना",
+        "यो होलीले तपाईंको जीवनमा नयाँ रंग भरोस्",
+        "होलीको पावन अवसरमा हार्दिक शुभेच्छा"
+      ],
+      "englishWishes": [
+        "Happy Holi!",
+        "May your life be as colorful as Holi",
+        "Wishing you a Holi filled with sweet moments and colorful memories",
+        "Let's celebrate the colors of love and joy"
+      ],
+      "cardImageUrls": [
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Fholi_card1.jpg",
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Fholi_card2.jpg",
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Fholi_card3.jpg"
+      ],
+      "date": "2025-03-14"
+    },
+    "losar": {
+      "name": "Losar",
+      "description": "Losar is the Tibetan New Year celebration observed by the Sherpa community in Nepal. It's a time for family gatherings, spiritual ceremonies, and traditional dances. The festival marks the beginning of a new year with prayers for prosperity and happiness.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Flosar.jpg",
+      "category": "Cultural",
+      "nepaliWishes": [
+        "लोसार तास्सी देलेक्",
+        "लोसारको हार्दिक शुभकामना",
+        "नयाँ वर्षको शुभारम्भको शुभकामना",
+        "सुख, शान्ति र समृद्धिको कामना"
+      ],
+      "englishWishes": [
+        "Losar Tashi Delek!",
+        "Happy Losar - Tibetan New Year",
+        "May this Losar bring peace and prosperity",
+        "Wishing you a blessed and joyous Losar"
+      ],
+      "cardImageUrls": [
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Flosar_card1.jpg",
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Flosar_card2.jpg",
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Flosar_card3.jpg"
+      ],
+      "date": "2025-02-21"
+    },
+    "maghe_sankranti": {
+      "name": "Maghe Sankranti",
+      "description": "Maghe Sankranti marks the beginning of the holy month of Magh. It celebrates the sun's northward journey, marking the end of winter. People take ritual baths in holy rivers and enjoy special delicacies like til ko laddu and chaku.",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fmaghe_sankranti.jpg",
+      "category": "Seasonal",
+      "nepaliWishes": [
+        "माघे सङ्क्रान्तिको शुभकामना",
+        "माघे सङ्क्रान्तिको हार्दिक मंगलमय शुभकामना",
+        "यस पावन पर्वले तपाईंको जीवनमा नयाँ उर्जा ल्याओस्",
+        "सूर्य भगवानको आशीर्वाद सधैं रहोस्"
+      ],
+      "englishWishes": [
+        "Happy Maghe Sankranti!",
+        "Wishing you warmth and prosperity on Maghe Sankranti",
+        "May this festival bring new energy to your life",
+        "Blessings of Sun God be with you always"
+      ],
+      "cardImageUrls": [
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Fmaghe_sankranti_card1.jpg",
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Fmaghe_sankranti_card2.jpg",
+        "https://firebasestorage.googleapis.com/v0/b/nepali-festival-wishes.appspot.com/o/festivals%2Fcards%2Fmaghe_sankranti_card3.jpg"
+      ],
+      "date": "2025-01-15"
+    }
+  }
+}

@@ -4,6 +4,8 @@ import 'package:nepali_festival_wishes/core/utils/app_colors.dart';
 import 'package:nepali_festival_wishes/features/onboarding/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nepali_festival_wishes/features/home/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nepali_festival_wishes/features/auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -49,17 +51,23 @@ class _SplashScreenState extends State<SplashScreen>
     final prefs = await SharedPreferences.getInstance();
     final isFirstTime = prefs.getBool('first_time') ?? true;
 
-    Timer(const Duration(milliseconds: 2200), () {
+    Timer(const Duration(milliseconds: 2200), () async {
+      if (!mounted) return;
+      if (isFirstTime) {
+        // mark as seen and show onboarding
+        await prefs.setBool('first_time', false);
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+        );
+        return;
+      }
+
+      final user = FirebaseAuth.instance.currentUser;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) =>
-              isFirstTime ? const OnboardingScreen() : const HomeScreen(),
+          builder: (_) => user != null ? const HomeScreen() : const LoginScreen(),
         ),
       );
-
-      if (isFirstTime) {
-        prefs.setBool('first_time', false);
-      }
     });
   }
 
@@ -74,17 +82,17 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: ScaleTransition(
-                    scale: _scaleAnimation,
-                    child: Image.asset(
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return Opacity(
+              opacity: _fadeAnimation.value,
+              child: Transform.scale(
+                scale: _scaleAnimation.value,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
                       'assets/images/logo.png',
                       height: 120,
                       errorBuilder: (context, error, stackTrace) => const Icon(
@@ -93,38 +101,22 @@ class _SplashScreenState extends State<SplashScreen>
                         color: AppColors.primary,
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 24),
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: const Text(
-                    'Nepali Festival Wishes',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins',
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Nepali Festival Wishes',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Poppins',
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 40),
-            const SizedBox(
-              width: 40,
-              height: 40,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                strokeWidth: 3,
+                  ],
+                ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

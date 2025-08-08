@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nepali_festival_wishes/core/utils/app_colors.dart';
 import 'package:nepali_festival_wishes/core/utils/app_theme.dart';
+import 'package:nepali_festival_wishes/features/auth/login_screen.dart';
+import 'package:nepali_festival_wishes/features/admin/admin_screen.dart';
+import 'package:nepali_festival_wishes/providers/auth_provider.dart';
 import 'package:nepali_festival_wishes/developer/developer_page.dart';
 import 'package:nepali_festival_wishes/features/favorites/favorites_screen.dart';
 import 'package:nepali_festival_wishes/features/festival_details/festival_details_screen.dart';
@@ -11,10 +14,19 @@ import 'package:nepali_festival_wishes/features/search/search_screen.dart';
 import 'package:nepali_festival_wishes/features/about/about_screen.dart';
 import 'package:nepali_festival_wishes/features/category/category_screen.dart';
 import 'package:nepali_festival_wishes/features/splash/splash_screen.dart';
-import 'package:nepali_festival_wishes/providers/festival_provider.dart';
+import 'package:nepali_festival_wishes/developer/firebase_setup_screen.dart';
+import 'package:nepali_festival_wishes/features/user/profile_screen.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase with generated options
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
@@ -53,7 +65,10 @@ class MyApp extends ConsumerWidget {
         '/search': (context) => const SearchScreen(),
         '/about': (context) => const AboutScreen(),
         '/home': (context) => const HomeScreen(),
+        '/profile': (context) => const ProfileScreen(),
         '/developer': (context) => const DeveloperPage(),
+        '/firebase-setup': (context) => const FirebaseSetupScreen(),
+        '/admin': (context) => const AdminScreen(),
       },
       onGenerateRoute: (settings) {
         if (settings.name!.startsWith('/festival/')) {
@@ -187,6 +202,34 @@ class AppDrawer extends ConsumerWidget {
               AppNavigation.navigateToDeveloper();
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('Profile'),
+            onTap: () {
+              Navigator.pop(context);
+              navigatorKey.currentState?.pushNamed('/profile');
+            },
+          ),
+          Consumer(
+            builder: (context, ref, _) {
+              final isAdmin = ref.watch(isAdminProvider);
+              return isAdmin.when(
+                data: (isAdmin) {
+                  if (!isAdmin) return const SizedBox.shrink();
+                  return ListTile(
+                    leading: const Icon(Icons.admin_panel_settings),
+                    title: const Text('Admin Panel'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/admin');
+                    },
+                  );
+                },
+                loading: () => const SizedBox.shrink(),
+                error: (_, __) => const SizedBox.shrink(),
+              );
+            },
+          ),
           const Divider(),
           ListTile(
             leading: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode),
@@ -196,101 +239,6 @@ class AppDrawer extends ConsumerWidget {
             },
           ),
         ],
-      ),
-    );
-  }
-
-  void _showCategoryDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Choose Category'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildCategoryButton(
-                context,
-                ref,
-                'Religious',
-                Icons.church,
-                AppColors.religious,
-              ),
-              _buildCategoryButton(
-                context,
-                ref,
-                'National',
-                Icons.flag,
-                AppColors.national,
-              ),
-              _buildCategoryButton(
-                context,
-                ref,
-                'Cultural',
-                Icons.people,
-                AppColors.cultural,
-              ),
-              _buildCategoryButton(
-                context,
-                ref,
-                'Seasonal',
-                Icons.nature,
-                AppColors.seasonal,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildCategoryButton(
-    BuildContext context,
-    WidgetRef ref,
-    String category,
-    IconData icon,
-    Color color,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: InkWell(
-        onTap: () {
-          Navigator.pop(context);
-          // Set the selected category
-          ref.read(selectedCategoryStringProvider.notifier).state = category;
-          // Navigate to category screen
-          AppNavigation.navigateToCategory(category);
-        },
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: color.withOpacity(0.3)),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, color: color),
-              const SizedBox(width: 16),
-              Text(
-                category,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

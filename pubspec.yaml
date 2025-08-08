@@ -34,6 +34,15 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.6
   
+  # Firebase (core packages only; platform-specific implementations are resolved transitively)
+  firebase_core: ^2.1.1
+  firebase_auth: ^4.1.0
+  cloud_firestore: ^4.0.3
+  firebase_ui_auth: ^1.0.0
+  google_sign_in: ^6.2.1
+  firebase_storage: ^11.6.5
+  file_picker: ^8.1.4
+  
   # State Management
   flutter_riverpod: ^2.4.0
   
@@ -92,6 +101,7 @@ flutter:
   assets:
     - assets/images/
     - assets/animations/
+    - firebase_sample_data.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

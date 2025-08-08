@@ -6,6 +6,10 @@ import 'package:nepali_festival_wishes/core/utils/date_formatter.dart';
 import 'package:nepali_festival_wishes/main.dart';
 import 'package:nepali_festival_wishes/models/festival.dart';
 import 'package:nepali_festival_wishes/providers/festival_provider.dart';
+import 'package:nepali_festival_wishes/providers/auth_provider.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:lottie/lottie.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,6 +19,7 @@ class HomeScreen extends ConsumerWidget {
     final upcomingFestivals = ref.watch(upcomingFestivalsProvider);
     final allFestivals = ref.watch(festivalProvider);
     final isDarkMode = ref.watch(themeProvider) == ThemeMode.dark;
+    final userAsync = ref.watch(currentUserProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -40,6 +45,22 @@ class HomeScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              userAsync.when(
+                data: (user) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    user != null && user.name.isNotEmpty
+                        ? 'Namaste, ${user.name.split(' ').first} 👋'
+                        : 'Namaste 👋',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                loading: () => const SizedBox.shrink(),
+                error: (_, __) => const SizedBox.shrink(),
+              ),
               _buildSectionHeader(context, 'Upcoming Festivals'),
               const SizedBox(height: 8),
               _buildUpcomingFestivalsSection(upcomingFestivals),
