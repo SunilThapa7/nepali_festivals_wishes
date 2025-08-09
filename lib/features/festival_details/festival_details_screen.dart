@@ -111,6 +111,7 @@ class _FestivalDetailsScreenState extends ConsumerState<FestivalDetailsScreen>
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
+              // No header actions; FAB below
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   children: [
@@ -411,6 +412,23 @@ class _FestivalDetailsScreenState extends ConsumerState<FestivalDetailsScreen>
           ],
         ),
 
+        // Floating submit button
+        Positioned(
+          right: 16,
+          bottom: 16,
+          child: FloatingActionButton(
+            onPressed: () {
+              final festival = ref.read(festivalByIdProvider(widget.festivalId)).value;
+              Navigator.of(context).pushNamed('/submit', arguments: {
+                'festivalId': widget.festivalId,
+                'festivalName': festival?.name,
+              });
+            },
+            tooltip: 'Submit content',
+            child: const Icon(Icons.add),
+          ),
+        ),
+
         // Full Screen Image View
         if (_isShowingFullImage)
           GestureDetector(
@@ -555,8 +573,7 @@ class _FestivalDetailsScreenState extends ConsumerState<FestivalDetailsScreen>
         return AppColors.cultural;
       case FestivalCategory.seasonal:
         return AppColors.seasonal;
-      default:
-        return AppColors.primary;
+      // Removed unreachable default
     }
   }
 
@@ -570,8 +587,7 @@ class _FestivalDetailsScreenState extends ConsumerState<FestivalDetailsScreen>
         return 'Cultural';
       case FestivalCategory.seasonal:
         return 'Seasonal';
-      default:
-        return 'Other';
+      // Removed unreachable default
     }
   }
 }

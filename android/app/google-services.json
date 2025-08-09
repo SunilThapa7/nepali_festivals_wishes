@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "641130721198",
+    "project_id": "nepali-festivals-wishes",
+    "storage_bucket": "nepali-festivals-wishes.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641130721198:android:15f4ac52cad04f99fba23f",
+        "android_client_info": {
+          "package_name": "com.example.nepali_festival_wishes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnt0SpeRi35YcVhn_0G80wGO5WZyPbrr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

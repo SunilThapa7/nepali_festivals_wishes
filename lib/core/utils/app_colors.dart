@@ -67,7 +67,7 @@ class AppColors {
   static MaterialColor createMaterialColor(Color color) {
     List<double> strengths = <double>[.05, .1, .2, .3, .4, .5, .6, .7, .8, .9];
     Map<int, Color> swatch = {};
-    final int r = color.red, g = color.green, b = color.blue;
+    final int r = (color.r * 255.0).round() & 0xff, g = (color.g * 255.0).round() & 0xff, b = (color.b * 255.0).round() & 0xff;
 
     for (int i = 0; i < 10; i++) {
       swatch[(strengths[i] * 1000).round()] = Color.fromRGBO(
@@ -78,6 +78,6 @@ class AppColors {
       );
     }
 
-    return MaterialColor(color.value, swatch);
+    return MaterialColor(color.toARGB32(), swatch);
   }
 }

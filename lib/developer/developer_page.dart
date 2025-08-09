@@ -42,14 +42,14 @@ class DeveloperPage extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 20,
                     spreadRadius: 5,
                     offset: const Offset(0, 5),
                   ),
                 ],
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
                   width: 4,
                 ),
               ),
@@ -102,7 +102,7 @@ class DeveloperPage extends StatelessWidget {
                     color: Theme.of(context)
                         .colorScheme
                         .onBackground
-                        .withOpacity(0.7),
+                        .withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -116,7 +116,7 @@ class DeveloperPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     spreadRadius: 0,
                     offset: const Offset(0, 2),
@@ -143,7 +143,7 @@ class DeveloperPage extends StatelessWidget {
                       color: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withOpacity(0.8),
+                          .withValues(alpha: 0.8),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -221,7 +221,7 @@ class DeveloperPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 color:
-                    Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                    Theme.of(context).colorScheme.onBackground.withValues(alpha: 0.5),
               ),
             ),
             const SizedBox(height: 8),
@@ -245,7 +245,7 @@ class DeveloperPage extends StatelessWidget {
         width: 46,
         height: 46,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(
@@ -264,7 +264,7 @@ class DeveloperPage extends StatelessWidget {
           Text(
             subtitle,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 2),
@@ -272,7 +272,7 @@ class DeveloperPage extends StatelessWidget {
             description,
             style: TextStyle(
               fontSize: 12,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
               fontStyle: FontStyle.italic,
             ),
           ),
@@ -282,7 +282,7 @@ class DeveloperPage extends StatelessWidget {
       trailing: Icon(
         Icons.arrow_forward_ios,
         size: 16,
-        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
       ),
     );
   }
@@ -305,83 +305,7 @@ class DeveloperPage extends StatelessWidget {
     );
   }
 
-  Widget _buildExperienceItem(
-    BuildContext context, {
-    required String company,
-    required String role,
-    required String period,
-    required String description,
-  }) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 12,
-          height: 12,
-          margin: const EdgeInsets.only(top: 6, right: 12),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                role,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Row(
-                children: [
-                  Text(
-                    company,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      period,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Text(
-                description,
-                style: TextStyle(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onBackground
-                      .withOpacity(0.7),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+
 
   Widget _buildProjectItem(
     BuildContext context, {
@@ -393,7 +317,7 @@ class DeveloperPage extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Theme.of(context).dividerColor.withOpacity(0.3),
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.3),
         ),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -430,7 +354,7 @@ class DeveloperPage extends StatelessWidget {
             description,
             style: TextStyle(
               fontSize: 14,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 12),
@@ -446,7 +370,7 @@ class DeveloperPage extends StatelessWidget {
                       color: Theme.of(context)
                           .colorScheme
                           .tertiaryContainer
-                          .withOpacity(0.5),
+                          .withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(

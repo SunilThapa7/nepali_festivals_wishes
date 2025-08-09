@@ -97,7 +97,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
           // Filter options
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -290,7 +290,7 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: festivalColor.withOpacity(0.1),
+                    color: festivalColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(

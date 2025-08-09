@@ -64,7 +64,7 @@ class FavoritesNotifier extends StateNotifier<List<FavoriteWish>> {
 
 /// Notifier for managing a single favorite wish
 class FavoriteWishNotifier extends StateNotifier<bool> {
-  final StateNotifierProviderRef ref;
+  final Ref ref;
   final String wishText;
 
   FavoriteWishNotifier(this.ref, this.wishText) : super(false) {

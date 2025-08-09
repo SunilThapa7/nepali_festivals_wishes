@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+// removed gallery_saver import; use platform share/download only
 import 'package:permission_handler/permission_handler.dart';
 import 'package:glassmorphism/glassmorphism.dart';
+
 
 class WishCard extends StatelessWidget {
   final String imageUrl;
@@ -47,16 +50,16 @@ class WishCard extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withOpacity(0.1),
-                    Colors.white.withOpacity(0.3),
+                    Colors.white.withValues(alpha: 0.1),
+                    Colors.white.withValues(alpha: 0.3),
                   ],
                 ),
                 borderGradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withOpacity(0.1),
-                    Colors.white.withOpacity(0.3),
+                    Colors.white.withValues(alpha: 0.1),
+                    Colors.white.withValues(alpha: 0.3),
                   ],
                 ),
                 child: Row(
@@ -154,8 +157,8 @@ class WishCard extends StatelessWidget {
   }
 
   void _shareCard(BuildContext context) {
-    Share.shareFiles(
-      [imageUrl],
+    Share.shareXFiles(
+      [XFile(imageUrl)],
       text: 'Happy $festivalName!',
       subject: '$festivalName Greeting Card',
     );
@@ -173,13 +176,10 @@ class WishCard extends StatelessWidget {
         if (data != null) {
           final Uint8List bytes = data.buffer.asUint8List();
 
-          // Save to gallery
-          await ImageGallerySaver.saveImage(
-            bytes,
-            quality: 100,
-            name:
-                '${festivalName}_greeting_${DateTime.now().millisecondsSinceEpoch}',
-          );
+          // Save to temporary file and let the user share/save externally
+          final tempDir = await getTemporaryDirectory();
+          final filePath = '${tempDir.path}/${festivalName}_greeting_${DateTime.now().millisecondsSinceEpoch}.png';
+          await File(filePath).writeAsBytes(bytes);
 
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(

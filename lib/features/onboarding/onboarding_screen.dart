@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nepali_festival_wishes/core/utils/app_colors.dart';
-import 'package:nepali_festival_wishes/features/home/home_screen.dart';
+import 'package:nepali_festival_wishes/features/auth/login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -43,9 +43,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.dispose();
   }
 
-  void _goToHome() {
+  void _goToAuth() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
   }
 
@@ -60,7 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextButton(
-                  onPressed: _goToHome,
+                  onPressed: _goToAuth,
                   child: const Text(
                     'Skip',
                     style: TextStyle(
@@ -106,7 +106,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_currentPage == _pages.length - 1) {
-                      _goToHome();
+                      _goToAuth();
                     } else {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
