@@ -7,7 +7,9 @@ import 'package:nepali_festival_wishes/main.dart';
 import 'package:nepali_festival_wishes/models/festival.dart';
 import 'package:nepali_festival_wishes/providers/festival_provider.dart';
 import 'package:nepali_festival_wishes/providers/auth_provider.dart';
-// removed unused imports
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:lottie/lottie.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);

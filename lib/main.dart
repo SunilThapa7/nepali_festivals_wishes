@@ -3,9 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nepali_festival_wishes/core/utils/app_colors.dart';
 import 'package:nepali_festival_wishes/core/utils/app_theme.dart';
-// removed unused import
-import 'package:nepali_festival_wishes/features/admin/admin_screen.dart';
-import 'package:nepali_festival_wishes/providers/auth_provider.dart';
 import 'package:nepali_festival_wishes/developer/developer_page.dart';
 import 'package:nepali_festival_wishes/features/favorites/favorites_screen.dart';
 import 'package:nepali_festival_wishes/features/festival_details/festival_details_screen.dart';
@@ -14,28 +11,10 @@ import 'package:nepali_festival_wishes/features/search/search_screen.dart';
 import 'package:nepali_festival_wishes/features/about/about_screen.dart';
 import 'package:nepali_festival_wishes/features/category/category_screen.dart';
 import 'package:nepali_festival_wishes/features/splash/splash_screen.dart';
-import 'package:nepali_festival_wishes/developer/firebase_setup_screen.dart';
-import 'package:nepali_festival_wishes/features/user/profile_screen.dart';
-import 'package:nepali_festival_wishes/features/submission/submit_content_screen.dart';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:nepali_festival_wishes/providers/festival_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize Firebase with generated options only if not already initialized
-  if (Firebase.apps.isEmpty) {
-    try {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-    } catch (e) {
-      print('Firebase initialization error: $e');
-    }
-  } else {
-    print('Firebase already initialized');
-  }
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
@@ -74,8 +53,6 @@ class MyApp extends ConsumerWidget {
         '/search': (context) => const SearchScreen(),
         '/about': (context) => const AboutScreen(),
         '/home': (context) => const HomeScreen(),
-        '/profile': (context) => const ProfileScreen(),
-        '/submit': (context) => const SubmitContentScreen(),
         '/developer': (context) => const DeveloperPage(),
         '/firebase-setup': (context) => const FirebaseSetupScreen(),
         '/admin': (context) => const AdminScreen(),

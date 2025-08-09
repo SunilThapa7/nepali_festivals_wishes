@@ -6,24 +6,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nepali_festival_wishes/providers/auth_provider.dart';
 import 'package:nepali_festival_wishes/services/firebase_service.dart';
-// import removed
+import 'package:nepali_festival_wishes/providers/festival_provider.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
-  final String? initialFestivalId;
-  final String? initialFestivalName;
-  final bool showSubmissionsInitially;
+  const ProfileScreen({Key? key}) : super(key: key);
 
-  const ProfileScreen({Key? key, this.initialFestivalId, this.initialFestivalName, this.showSubmissionsInitially = false}) : super(key: key);
   @override
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final _nameController = TextEditingController();
-  // submission-related state removed
+  String? _selectedFestivalId;
+  String? _selectedFestivalName;
+  String _submissionType = 'wish'; // 'wish' | 'card'
+  String _language = 'nepali';
   final _valueController = TextEditingController();
   bool _saving = false;
-  bool _showSubmissions = false;
   String? _pickedImagePath; // for URL selection
   Uint8List? _pickedBytes; // for device selection
 
@@ -32,12 +32,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     _nameController.dispose();
     _valueController.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _showSubmissions = widget.showSubmissionsInitially;
   }
 
   Future<void> _saveProfile() async {
@@ -50,10 +44,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       if (_pickedBytes != null) {
         final storage = FirebaseStorage.instance;
         final refPath = storage.ref().child('avatars/${user.uid}.jpg');
-        await refPath.putData(_pickedBytes!, SettableMetadata(contentType: 'image/jpeg'));
+        await refPath.putData(_pickedBytes!);
         avatarUrlToSave = await refPath.getDownloadURL();
-      } else {
-        avatarUrlToSave = _pickedImagePath;
       }
 
       await ref.read(authServiceProvider).updateUserProfile(
@@ -97,6 +89,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ),
       ),
     );
+
     if (choice == 'url') {
       final controller = TextEditingController(text: _pickedImagePath ?? '');
       final result = await showDialog<String>(
@@ -106,13 +99,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           content: TextField(
             controller: controller,
             decoration: const InputDecoration(
-              labelText: 'Paste image URL',
-              hintText: 'https://.../avatar.png',
+              hintText: 'Enter image URL',
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-            ElevatedButton(onPressed: () => Navigator.pop(context, controller.text.trim()), child: const Text('Use')),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, controller.text),
+              child: const Text('OK'),
+            ),
           ],
         ),
       );
@@ -150,12 +148,101 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return image != null ? await image.readAsBytes() : null;
   }
 
-  // Submission moved to dedicated screen
+  Future<void> _pickAndUploadAvatar() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (result == null || result.files.single.bytes == null) return;
+    setState(() => _saving = true);
+    try {
+      final storageRef = FirebaseStorage.instance
+          .ref('avatars/${user.uid}_${DateTime.now().millisecondsSinceEpoch}.png');
+      await storageRef.putData(result.files.single.bytes!, SettableMetadata(contentType: 'image/png'));
+      final url = await storageRef.getDownloadURL();
+      await ref.read(authServiceProvider)
+          .updateUserProfile(userId: user.uid, avatarUrl: url);
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Avatar updated')));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
+      }
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  Future<void> _pickAndUploadCardImage() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (result == null || result.files.single.bytes == null) return;
+    setState(() => _saving = true);
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final ref = FirebaseStorage.instance.ref(
+          'cards/${user?.uid ?? 'anon'}_${DateTime.now().millisecondsSinceEpoch}.png');
+      await ref.putData(result.files.single.bytes!, SettableMetadata(contentType: 'image/png'));
+      final url = await ref.getDownloadURL();
+      setState(() {
+        _submissionType = 'card';
+        _valueController.text = url;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Card image uploaded. URL filled.')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
+      }
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  Future<void> _submitContent() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+    if (_selectedFestivalId == null || _valueController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Select festival and enter content')),
+      );
+      return;
+    }
+
+    setState(() => _saving = true);
+    try {
+      await FirebaseService().createSubmission(
+        userId: user.uid,
+        festivalId: _selectedFestivalId!,
+        festivalName: _selectedFestivalName ?? '',
+        type: _submissionType,
+        language: _submissionType == 'wish' ? _language : null,
+        value: _valueController.text.trim(),
+      );
+      _valueController.clear();
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Submitted for review')));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
+      }
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserProvider);
-    // festivals provider no longer needed here
+    final festivals = ref.watch(festivalProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Profile')),
@@ -172,34 +259,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   children: [
                     Row(
                       children: [
-                        Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 32,
-                              backgroundImage: _pickedBytes != null
-                                  ? MemoryImage(_pickedBytes!)
-                                  : (_pickedImagePath != null && _pickedImagePath!.isNotEmpty)
-                                      ? NetworkImage(_pickedImagePath!)
-                                      : (user?.avatarUrl != null && (user!.avatarUrl!.isNotEmpty))
-                                          ? NetworkImage(user.avatarUrl!)
-                                          : const AssetImage('assets/images/logo.png') as ImageProvider,
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: InkWell(
-                                onTap: _pickAvatar,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  padding: const EdgeInsets.all(6),
-                                  child: const Icon(Icons.edit, size: 14, color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ],
+                        CircleAvatar(
+                          radius: 32,
+                          backgroundImage: (user?.avatarUrl != null && user!.avatarUrl!.isNotEmpty)
+                              ? NetworkImage(user.avatarUrl!)
+                              : null,
+                          child: (user?.avatarUrl == null || (user!.avatarUrl ?? '').isEmpty)
+                              ? const Icon(Icons.person, size: 32)
+                              : null,
+                        ),
+                        const SizedBox(width: 12),
+                        OutlinedButton.icon(
+                          onPressed: _saving ? null : _pickAndUploadAvatar,
+                          icon: const Icon(Icons.upload),
+                          label: const Text('Upload Avatar'),
                         ),
                       ],
                     ),
@@ -231,16 +304,115 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (_, __) => const SizedBox.shrink(),
             ),
-            // Submission UI moved to dedicated screen
             const SizedBox(height: 24),
-            if (_showSubmissions) ...[
-              const Text(
-                'My Submissions',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            const Text(
+              'Submit Content',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            festivals.when(
+              data: (list) {
+                return DropdownButtonFormField<String>(
+                  value: _selectedFestivalId,
+                  isExpanded: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Select Festival',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: list
+                      .map((f) => DropdownMenuItem(
+                            value: f.id,
+                            child: Text(f.name),
+                            onTap: () {
+                              _selectedFestivalName = f.name;
+                            },
+                          ))
+                      .toList(),
+                  onChanged: (v) {
+                    setState(() => _selectedFestivalId = v);
+                  },
+                );
+              },
+              loading: () => const LinearProgressIndicator(),
+              error: (_, __) => const SizedBox.shrink(),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _submissionType,
+                    decoration: const InputDecoration(
+                      labelText: 'Type',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: const [
+                      DropdownMenuItem(value: 'wish', child: Text('Wish')),
+                      DropdownMenuItem(value: 'card', child: Text('Card URL')),
+                    ],
+                    onChanged: (v) {
+                      setState(() => _submissionType = v ?? 'wish');
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                if (_submissionType == 'wish')
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      value: _language,
+                      decoration: const InputDecoration(
+                        labelText: 'Language',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: const [
+                        DropdownMenuItem(value: 'nepali', child: Text('Nepali')),
+                        DropdownMenuItem(value: 'english', child: Text('English')),
+                      ],
+                      onChanged: (v) {
+                        setState(() => _language = v ?? 'nepali');
+                      },
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _valueController,
+              decoration: InputDecoration(
+                labelText: _submissionType == 'wish' ? 'Wish text' : 'Card image URL',
+                border: const OutlineInputBorder(),
               ),
+              maxLines: _submissionType == 'wish' ? 3 : 1,
+            ),
+            if (_submissionType == 'card') ...[
               const SizedBox(height: 8),
-              _UserSubmissionsList(),
+              OutlinedButton.icon(
+                onPressed: _saving ? null : _pickAndUploadCardImage,
+                icon: const Icon(Icons.cloud_upload),
+                label: const Text('Upload card image'),
+              ),
             ],
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 48,
+              child: ElevatedButton(
+                onPressed: _saving ? null : _submitContent,
+                child: _saving
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Submit'),
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'My Submissions',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            _UserSubmissionsList(),
           ],
         ),
       ),
@@ -257,7 +429,7 @@ class _UserSubmissionsList extends ConsumerWidget {
       stream: FirebaseService().getUserSubmissions(user.uid),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const SizedBox.shrink();
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());

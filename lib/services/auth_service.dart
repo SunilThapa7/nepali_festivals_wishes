@@ -104,25 +104,11 @@ class AuthService {
     return null;
   }
 
-  // Sign in
-  Future<UserModel?> signIn({
-    required String email,
-    required String password,
-  }) async {
+  // Sign in with email and password
+  Future<User?> signInWithEmailAndPassword(String email, String password) async {
     try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      User? user = result.user;
-      if (user != null) {
-        DocumentSnapshot doc =
-            await _firestore.collection('users').doc(user.uid).get();
-        if (doc.exists) {
-          return UserModel.fromFirestore(doc);
-        }
-      }
+      final result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return result.user;
     } catch (e) {
       throw _mapAuthError(e);
     }
